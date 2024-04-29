@@ -1,35 +1,45 @@
-# Rack::Ratelimiter
+# Rack::RateLimiter
 
-TODO: Delete this and the text below, and describe your gem
+A Simple Rack middleware for Rack. This should be compatible
+with any rack capable framework. For example:
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/rack/ratelimiter`. To experiment with that code, run `bin/console` for an interactive prompt.
+1. Agoo
+2. Falcon
+3. Iodine
+4. NGINX Unit
+5. Phusion Passenger (which is mod_rack for Apache and for nginx)
+6. Puma
+7. Thin
+8. Unicorn
+9. uWSGI
+10. Lamby (AWS Lambda)
 
-## Installation
+This was a PoC designed for fun over a weekend project
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+# How do I configure
 
-Install the gem and add to the application's Gemfile by executing:
+    Rack::RateLimiter.configure do |config|
+      config.whitelist("10.0.0.1")
+      config.blacklist("192.168.1.1")
+      config.rate(ip = "127.0.0.1", count = 2, duration = 1.second)
+      config.rate(ip = "10.0.0.1", count = 2, duration = 1.second)
+      config.rate(ip = "192.168.1.1", count = 2, duration = 1.second)
+      config.logger = ::Logger.new(STDOUT)
+      config.log_level = ::Logger::INFO
+      config.limited_block = Proc.new { [429, {}, ["Too Many Requests"]] }
+      config.blacklisted_block = Proc.new { [403, {}, ["Blacklisted"]] }
+    end
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+# TODO
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+1. Move Rack::RateLimiter::Limiter#limits to a Cache like memcached and add auto expiry
+2. Add a way to clear IPs from cache
+3. Add a way to add configuration dynamically
+4. Add a way to print out the rules in a readable format
+5. Add integrations (Like Slack / AWS SNS / etc)
+6. Fix docker image (broken because local gem is used)
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+# TESTS
 
-## Usage
+Run tests with ```bundle exec rake spec```
 
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/rack-ratelimiter.
-
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
