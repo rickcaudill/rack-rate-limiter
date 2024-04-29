@@ -1,0 +1,14 @@
+module Rack
+  module RateLimiter
+    class Limiter
+      @app: untyped
+      @configuration: untyped
+      @limits: { }
+
+      def initialize: -> void
+
+      def call: -> [ ]
+    end
+
+  end
+end

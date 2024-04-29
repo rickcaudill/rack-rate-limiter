@@ -1,0 +1,3 @@
+class LimitController
+  def index: -> untyped
+end

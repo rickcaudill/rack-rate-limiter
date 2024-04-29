@@ -1,0 +1,8 @@
+module Rack
+  module RateLimiter
+    VERSION: String
+
+    def self.configuration: -> void
+
+  end
+end

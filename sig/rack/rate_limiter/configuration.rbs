@@ -1,0 +1,27 @@
+module Rack
+  module RateLimiter
+    class Configuration
+      @blacklist: [ ]
+      @log_level: untyped
+      @logger: untyped
+      @whitelist: [ ]
+      @rates: { }
+
+      def initialize: -> void
+
+      def blacklist: -> [ ]
+
+      def blacklisted?: -> bool
+
+      def limited?: -> bool
+
+      def rate: -> void
+
+      def whitelist: -> [ ]
+
+      def whitelisted?: -> bool
+
+    end
+
+  end
+end
